@@ -7,7 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 
@@ -16,17 +19,19 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class User {
  
-	@Column
+	@Column(nullable = false)
 	private String name;
 	
 	@Id
+	@Column(nullable = false, updatable = false)
 	private String email;
 	
 	@Column
 	private String password;
 	
 
-	@Column
+	@Column(nullable = false, updatable = false)
+	@CreationTimestamp
 	private Date creationDate;
 	
 	public User() {}
@@ -53,6 +58,22 @@ public class User {
 
 	public Date getCreationDate() {
 		return creationDate;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 
 	@Override

@@ -7,6 +7,9 @@ import com.isi.spring.buddysconnect.model.User;
 
 
 public interface IUserRepository extends JpaRepository<User, String> {
+	
+	//void saveUser(User user);
+	User findByEmail(String email);
 
 }
 
