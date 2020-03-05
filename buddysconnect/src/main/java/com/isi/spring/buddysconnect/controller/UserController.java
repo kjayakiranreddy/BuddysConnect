@@ -2,7 +2,14 @@ package com.isi.spring.buddysconnect.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -15,19 +22,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.isi.spring.buddysconnect.model.User;
 import com.isi.spring.buddysconnect.repository.IUserRepository;
-import com.isi.spring.buddysconnect.service.MyUserDetailsService;
 import com.isi.spring.buddysconnect.validator.UserValidator;
 
 @Controller
-
 public class UserController {
 
 	@Autowired
-	private IUserRepository userRepository;
-
+	private PasswordEncoder passwordEncoder;
+	
 	@Autowired
-	private MyUserDetailsService myUserDeatailsService;
-
+	private IUserRepository userRepository;
 	@Autowired
 	private UserValidator userValidator;
 
@@ -41,37 +45,16 @@ public class UserController {
 		return "login";
 	}
 
-	@RequestMapping("/login")
+	@RequestMapping(value = "/login")
 	public String loginPage() {
-		return "welcome";
+		return "home";
 	}
 
-	/*
-	 * @RequestMapping(value = "/login", method = RequestMethod.POST) public String
-	 * showWelcomePage(ModelMap model, @RequestParam("email") String
-	 * email, @RequestParam String password) {
-	 * 
-	 * 
-	 * boolean isValidUser = true;
-	 * 
-	 * if (!isValidUser) { model.put("errorMessage", "Invalid Credentials"); return
-	 * "login"; }
-	 * 
-	 * model.put("email", email); model.put("password", password);
-	 * 
-	 * return "welcome"; }
-	 */
+
 
 	@GetMapping("/users") // GET Method for reading operation
 	public List<User> getAllUsers() {
 		return userRepository.findAll();
-	}
-
-	@PostMapping("/insertUser") // POST Method for Create operation
-	public void createUser() {
-		// myUserDeatailsService.saveUser(new User("Jayakiran", "test@test.com", "Test",
-		// new Date()));
-		// userRepository.save
 	}
 
 	@GetMapping("/registration")
@@ -88,9 +71,20 @@ public class UserController {
 		if (bindingResult.hasErrors()) {
 			return "registration";
 		}
-
+		userForm.setPassword( passwordEncoder.encode(userForm.getPassword()));
 		userRepository.save(userForm);
 
-		return "redirect:/welcome";
+		return "redirect:/login";
+	}
+
+	@RequestMapping(value = "/logout-success", method = RequestMethod.GET)
+	public String logout(HttpServletRequest request, HttpServletResponse response) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (auth != null) {
+			new SecurityContextLogoutHandler().logout(request, response, auth);
+			request.getSession().invalidate();
+		}
+		return "redirect:/";
 	}
 }
