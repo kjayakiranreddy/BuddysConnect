@@ -1,17 +1,21 @@
 package com.isi.spring.buddysconnect.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 
 
 @Entity
@@ -29,10 +33,17 @@ public class User {
 	@Column
 	private String password;
 	
+	
+	@OneToMany
+	@JoinColumn(name="user_email")
+	private List<Posts> posts = new ArrayList<>();
 
 	@Column(nullable = false, updatable = false)
 	@CreationTimestamp
 	private Date creationDate;
+	
+	@ManyToMany
+	private List<Friends> friends;
 	
 	public User() {}
 	
@@ -42,6 +53,10 @@ public class User {
 		this.email = email;
 		this.password = password;
 		this.creationDate = creationDate;
+	}
+
+	public List<Posts> getPosts() {
+		return posts;
 	}
 
 	public String getName() {
@@ -78,8 +93,8 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", email=" + email + ", password=" + password + ", creationDate=" + creationDate
-				+ "]";
+		return "User [name=" + name + ", email=" + email + ", password=" + password + ", posts=" + posts
+				+ ", creationDate=" + creationDate + "]";
 	}
 
 
