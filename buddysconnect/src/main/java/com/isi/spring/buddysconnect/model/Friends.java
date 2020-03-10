@@ -48,6 +48,11 @@ public class Friends{
 		
 	}
 
+	public Friends(FriendsIdentity friendsIdentity, int status) {
+		this.friendsIdentity = friendsIdentity;
+		this.status = status;
+	}
+	
 	public Friends(FriendsIdentity friendsIdentity, int status, List<User> users) {
 		this.friendsIdentity = friendsIdentity;
 		this.status = status;

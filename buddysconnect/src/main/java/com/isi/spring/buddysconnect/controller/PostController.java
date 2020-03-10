@@ -70,6 +70,7 @@ public class PostController {
 		postForm.setUser(user);
 		postForm.setImagePath(imagePath);
 		postsRepository.save(postForm);
+
 		return "redirect:/";
 	}
 
@@ -101,6 +102,8 @@ public class PostController {
 			postsRepository.save(post);
 		}
 		return "redirect:/";
+
+
 	}
 
 }

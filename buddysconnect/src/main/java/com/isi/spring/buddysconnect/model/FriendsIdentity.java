@@ -24,7 +24,7 @@ public class FriendsIdentity implements Serializable{
 		
 	}
 
-	public FriendsIdentity(@NotNull String relatingUserEmail, @NotNull String relatedUserEmail) {
+	public FriendsIdentity( @NotNull String relatedUserEmail,@NotNull String relatingUserEmail) {
 		super();
 		this.relatingUserEmail = relatingUserEmail;
 		this.relatedUserEmail = relatedUserEmail;
@@ -60,6 +60,7 @@ public class FriendsIdentity implements Serializable{
 			return false;
 		return true;
 	}
+
 	
-	
+
 }
