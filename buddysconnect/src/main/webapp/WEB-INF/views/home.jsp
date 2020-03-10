@@ -4,11 +4,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
 </head>
+<script type="text/javascript"
+	src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
 <style>
 body {
 	background-color: lightblue;
@@ -25,25 +27,67 @@ article {
 	text-align: left;
 }
 </style>
+<script type="text/javascript">
+	$(document).ready(function(){
+		document.getElementById("main").style.display = "none";
+	});
+	let main = document.querySelector('main');
+
+	function searchUser(input){
+	    //console.log(input.value);
+	    let userInput = input.value;
+	    	   
+	    let friends = document.querySelectorAll('.friend');
+
+	    //console.log(products)
+
+	    friends.forEach(friend => {
+	    	document.getElementById("main").style.display = "block";
+	        let email = friend.querySelector('span').innerText;
+
+	        if((email).includes(userInput)){
+	            friend.style.display = 'block';
+	        }else{
+	            friend.style.display = 'none';
+	        }
+	    }) 
+	}
+</script>
 <body>
 
 	<h1>Welcome ${name}</h1>
-	<a href="/logout">logout</a>
+	<a href="/logout">logout</a>&nbsp;&nbsp;
+	<a href="/updatePassword">Update Password</a>&nbsp;&nbsp;
+	<a href="/deleteAccount">Delete Account</a>
 	<form class="form-inline" id="searchForm" name="searchForm"
 		action="posts" method="post">
 		<input class="form-control mr-sm-2" type="search"
 			onkeyup="searchUser(this)" placeholder="Search" aria-label="Search">
-		<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+		<main id="main" style="display: none;">
+			<c:forEach items="${addFriendList}" var="user">
+				<div id="myModal" class="friend">
+					<span>${user}</span> <a href="/addFriend/${user}">Add Friend</a>
+					<!-- <button id="remove">Remove</button>
+	                        <button id="block">Block</button> -->
+				</div>
+			</c:forEach>
+		</main>
 		<div class="Container">
-<!-- 			<article>
-				<img alt="" src=".../images/man.png"> <input type="button"
-					name="friendReq" id="friendReq"> <input type="button"
-					name="messages" id="messages"> <input type="button"
-					name="notification" id="notification"> <input type="button"
-					name="feed" id="feed">
-			</article> -->
+
 			<article>
-			<a href="friends">Users</a>
+				<h2>Friends requests</h2>
+				<table>
+					<tbody>
+						<c:forEach items="${friendsRequestList}" var="friendRequest">
+							<tr>
+								<td>${friendRequest}</td>
+								<td><a href="/confirmFriendRequest/${friendRequest}">Confirm</a></td>
+								<td><a href="/removeFriendRequest/${friendRequest}">Delete Request</a></td>
+							</tr>
+						</c:forEach>
+
+					</tbody>
+				</table>
 			</article>
 			<article>
 				<h2>Friends</h2>
@@ -51,20 +95,17 @@ article {
 					<thead>
 						<tr>
 							<th>Friend</th>
-							<th>Status</th>
 						</tr>
 					</thead>
 					<tbody>
-				<%-- <c:forEach items="${listFriends}" var="friend">
-					<tr>
-				    
-				     <td>${friend.relatedUserEmail}</td>  
-				     <td>${friend.status}</td>
-				   
-					
-					</tr>
-				</c:forEach> --%>
-				</tbody>
+						<c:forEach items="${friendsList}" var="friend">
+							<tr>
+								<td>${friend}</td>
+								<td><a href="/removeFriend/${friend}">Remove</a></td>
+							</tr>
+						</c:forEach>
+
+					</tbody>
 				</table>
 			</article>
 			<article>
@@ -85,7 +126,7 @@ article {
 							<tr>
 								<td>${post.content}</td>
 								<td>${post.imagePath}</td>
-								<td><input type="button" name="like" Value="Like"></td> 
+								<td><input type="button" name="like" Value="Like"></td>
 								<td><c:url value="/editPost/${post.postId}">Edit</c:url></td>
 								<td><input type="button" name="delete" Value="Delete"></td>
 							</tr>
@@ -95,5 +136,8 @@ article {
 			</article>
 		</div>
 	</form>
+	<script
+		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="${contextPath}/js/bootstrap.min.js"></script>
 </body>
 </html>

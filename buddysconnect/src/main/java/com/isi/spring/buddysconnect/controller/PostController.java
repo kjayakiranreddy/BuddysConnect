@@ -45,10 +45,6 @@ public class PostController {
 		User user = userRepository.findByEmail(request.getUserPrincipal().getName());
 		postForm.setUser(user);
 		postsRepository.save(postForm);
-		/*
-		 * User user= userRepository.findByEmail("jaykiranreddy@gmail.com");
-		 * postsRepository.save(new Posts( "Myfirst Post", "imagespath",user));
-		 */
 		return "redirect:";
 	}
 	
