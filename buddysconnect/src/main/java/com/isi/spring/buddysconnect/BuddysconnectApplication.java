@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BuddysconnectApplication  {
 	
 	public static void main(String[] args) {
+	
 		SpringApplication.run(BuddysconnectApplication.class, args);
 	}
 }

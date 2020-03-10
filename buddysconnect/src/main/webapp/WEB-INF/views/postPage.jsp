@@ -18,13 +18,13 @@
 </head>
 <body>
 <div>
-	<form:form method="post" modelAttribute="postForm" class="" enctype="multipart/form-data">
+	 <form:form  method="post" modelAttribute="postForm"  enctype="multipart/form-data">
 			<h2 class="form-signin-heading">Create a Post</h2>
-			<spring:bind path="imagePath">
+			<spring:bind path="media">
 				<div class="form-group ${status.error ? 'has-error' : ''}">
-					<form:input type="file" path="imagePath" class="form-control"
-						placeholder="Upload Files" autofocus="true"></form:input>
-					<form:errors path="imagePath"></form:errors>
+					<form:input type="file"  name="media" path="media" class="form-control"
+						placeholder="Upload Files" autofocus="true multiple"></form:input>
+					<form:errors path="media"></form:errors>
 				</div>
 			</spring:bind>
 			<spring:bind path="content">
@@ -34,8 +34,16 @@
 					<form:errors path="content"></form:errors>
 				</div>
 			</spring:bind>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
+			<button class="btn btn-lg btn-primary btn-block" type="submit">Add Post</button>
 		</form:form>
+		
+		<%-- <form  method="post" enctype="multipart/form-data">
+		
+		<input type="file" name="media" multiple>
+		<input type="text" name="content" > 
+		<input type="submit" value="add post"></input> --%>
+		
+		</form>
 		</div>
 		
 		<script

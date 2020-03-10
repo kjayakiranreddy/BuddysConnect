@@ -1,6 +1,8 @@
 package com.isi.spring.buddysconnect.model;
 
+import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,15 +10,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 @Entity
 public class Posts {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private long postId;
+	private int postId;
 	
 	private String content;
 	
@@ -26,9 +30,12 @@ public class Posts {
 	 @CreationTimestamp
 	private Date postDate;
 	
+	 @Transient
+	 private MultipartFile media;
 	 
 	 @ManyToOne
 	 private User user;
+	 
 	
 	public Posts() {}
 
@@ -81,6 +88,14 @@ public class Posts {
 	public String toString() {
 		return "Posts [postId=" + postId + ", content=" + content + ", imagePath=" + imagePath + ", postDate="
 				+ postDate + "]";
+	}
+
+	public MultipartFile getMedia() {
+		return media;
+	}
+
+	public void setMedia(MultipartFile media) {
+		this.media = media;
 	}
 
 

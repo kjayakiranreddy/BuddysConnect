@@ -53,7 +53,6 @@ public class UserController {
 		model.addAttribute("name",request.getUserPrincipal().getName() );
 		List<Posts> listPosts = postsRepository.findAllByUserEmail(request.getUserPrincipal().getName());
 		List<User> users = getAllUsers();
-		//List<Posts> listPosts = postsRepository.findAll();
 		model.addAttribute("posts",listPosts);
 		model.addAttribute("users", users);
 		Friends friends = new Friends(new FriendsIdentity("jaykiranreddy@gmail.com","sindhu139@gmail.com"),1,users);
