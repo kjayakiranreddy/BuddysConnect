@@ -18,7 +18,7 @@
 	<div id="main-container" >
 		<header id="header">
 			<section >
-				<a href="/" style="color: white"><img src="/images/user.png" width="30" />My profile</a>
+				<a href="/" style="color: white"><img src="/images/user.png" width="30" />Click to My profile</a>
 			</section>
 
 		</header>

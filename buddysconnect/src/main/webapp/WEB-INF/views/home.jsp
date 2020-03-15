@@ -121,6 +121,26 @@
 						</div>
 					</c:forEach>
 				</article>
+				<article>
+					<h2>Feed</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Post Content</th>
+								<th>Image</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${feed}" var="post">
+								<tr>
+									<td>${post.content}</td>
+									<td><img src="/images/${post.imagePath}" width="50px" height="50px">&nbsp;&nbsp;</td>
+									<td><input type="button" name="like" Value="Like"></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</article>
 				<article style="border: 1px solid black">
 					<h2>Messages</h2>
 					<c:forEach items="${userMessages}" var="messages">
