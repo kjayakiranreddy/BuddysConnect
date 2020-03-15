@@ -1,8 +1,6 @@
 package com.isi.spring.buddysconnect.model;
 
-import java.io.File;
 import java.util.Date;
-import java.util.HashMap;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -68,7 +66,7 @@ public class Posts {
 		return user;
 	}
 
-	public long getPostId() {
+	public int getPostId() {
 		return postId;
 	}
 

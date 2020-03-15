@@ -1,6 +1,6 @@
 package com.isi.spring.buddysconnect.model;
 
-import java.util.List;
+
 /*
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;

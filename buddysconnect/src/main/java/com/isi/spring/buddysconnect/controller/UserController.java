@@ -49,38 +49,41 @@ public class UserController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Model model, HttpServletRequest request) {
-		model.addAttribute("name", request.getUserPrincipal().getName());
+		
 		String loggedUser = request.getUserPrincipal().getName();
 		List<Posts> listPosts = postsRepository.findAllByUserEmail(loggedUser);
 		List<User> users = getAllUsers();
 		model.addAttribute("posts",listPosts);
-
 		model.addAttribute("users", users);
+		String loggedInUserName=userRepository.findByEmail(loggedUser).getName();
+		model.addAttribute("name", loggedInUserName);
+		List<String> friendsList1 = friendsRepository.findByRelatedUserEmail(loggedUser,1);
 
-		List<String> friendsList1 = friendsRepository.findByRelatedUserEmail(loggedUser);
-
-		List<String> friendsList2 = friendsRepository.findByRelatingUserEmail(loggedUser);
+		List<String> friendsList2 = friendsRepository.findByRelatingUserEmail(loggedUser,1);
 
 		List<String> totalFriendsList = new ArrayList<String>(friendsList1);
 		totalFriendsList.addAll(friendsList2);
 
 		model.addAttribute("friendsList", totalFriendsList);
 
-		List<String> friendRequestList = friendsRepository.findByRelatingUserEmailRequest(loggedUser);
+		List<String> friendRequestList = friendsRepository.findByRelatingUserEmail(loggedUser,0);
 
 		model.addAttribute("friendsRequestList", friendRequestList);
+		
+		model.addAttribute("feed",postsRepository.findAll());
 
 		// Search friends
-		List<String> usersList = new ArrayList<String>();
+		List<String> userEmails = new ArrayList<String>();
 		for (User user : users) {
-			for (String friend : totalFriendsList) {
-				if (!user.getEmail().equalsIgnoreCase(loggedUser) && !user.getEmail().equalsIgnoreCase(friend)) {
-					usersList.add(user.getEmail());
-				}
-			}
+			userEmails.add(user.getEmail());
 		}
+		
+		userEmails.removeAll(totalFriendsList);
+		userEmails.removeAll(friendsRepository.findByRelatedUserEmail(loggedUser, 0));
+		
+		userEmails.remove(loggedUser);
 
-		model.addAttribute("usersList", usersList);
+		model.addAttribute("usersList", userEmails);
 	
 		return "home";
 	}
@@ -102,12 +105,6 @@ public class UserController {
 		return "home";
 	}
 
-	/*
-	 * @RequestMapping(value = "/login", method=RequestMethod.POST) public String
-	 * loginPage(Model model, HttpServletRequest request) {
-	 * model.addAttribute("name",request.getUserPrincipal().getName()); return
-	 * "home"; }
-	 */
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String loginPage() {
@@ -164,13 +161,48 @@ public class UserController {
 		userRepository.save(updateUserPassword);
 		return "redirect:/login";
 	}
+	
+	private void clearPosts(String userEmail) {
+		List<Posts> posts=postsRepository.findAllByUserEmail(userEmail);
+
+		for (Posts posts2 : posts) {
+			postsRepository.deleteById(posts2.getPostId());
+		}
+	}
+	
+	@RequestMapping(value = "/clearAccount")
+	public String clearAccount(HttpServletRequest request) {
+		clearPosts(request.getUserPrincipal().getName());
+		return "redirect:/";
+	}
 
 	@RequestMapping(value = "/deleteAccount")
 	public String deleteUser(HttpServletRequest request) {
-		User deleteUser = userRepository.findByEmail(request.getUserPrincipal().getName());
+		String deleteUserMail=request.getUserPrincipal().getName();
+		clearPosts(deleteUserMail);
+		
+		User deleteUser = userRepository.findByEmail(deleteUserMail);
 
 		userRepository.delete(deleteUser);
 		return "redirect:/login";
 	}
 
+	@RequestMapping("/viewFriendProfile/{friendMail}")
+	public String viewFriendProfile(@PathVariable String friendMail, Model model, HttpServletRequest request) {
+		
+		List<Posts> listPosts = postsRepository.findAllByUserEmail(friendMail);
+		List<User> users = getAllUsers();
+		model.addAttribute("posts",listPosts);
+		model.addAttribute("users", users);
+		List<String> friendsList1 = friendsRepository.findByRelatedUserEmail(friendMail,1);
+
+		List<String> friendsList2 = friendsRepository.findByRelatingUserEmail(friendMail,1);
+
+		List<String> totalFriendsList = new ArrayList<String>(friendsList1);
+		totalFriendsList.addAll(friendsList2);
+
+		model.addAttribute("friendsList", totalFriendsList);
+
+		return "viewFriendProfile";
+	}
 }

@@ -3,6 +3,9 @@ body {
     padding-bottom: 40px;
     background-color: #eee;
 }
+artical{
+	border:1px solid black;
+}
 
 .form-signin {
     max-width: 330px;

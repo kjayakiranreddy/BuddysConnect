@@ -45,6 +45,9 @@ public class User {
 	@ManyToMany
 	private List<Friends> friends;
 	
+	@ManyToMany
+	private List<Messages> messages;
+	
 	public User() {}
 	
 	public User(String name, String email, String password, Date creationDate) {
